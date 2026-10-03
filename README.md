@@ -161,7 +161,7 @@ git worktree add ../shoal-website-worktrees/<name> -b <branch> origin/main
 
 ### Custom domains
 
-> **State on 2026-10-03:** the first deploy went to `shoal-website.earthos-waitlist.workers.dev` only; the `shoal.ing` and `www.shoal.ing` routes are ready in `wrangler.toml` but not attached yet (the zone is on Cloudflare; the next `tools/deploy.sh` attaches them).
+> **State on 2026-10-03:** `shoal.ing` and `www.shoal.ing` are attached and live; the deploy attaches them itself.
 
 The routes in `wrangler.toml` need the `shoal.ing` zone active on the Factory0
 account. If it is not, wrangler refuses the deploy; to bring them up from

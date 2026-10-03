@@ -395,10 +395,10 @@
 
   /* --------------------------------------------------------- 04 sign-up
      Posts { email, product: "shoal" } to the waitlist Worker at api.shoal.ing,
-     the same contract as the release.show and Colonizer waitlists. That Worker
-     does not exist yet: on any failure the form says so and offers the
-     address, rather than pretending the email was saved. Without JS the form
-     is a mailto. */
+     the same contract as the release.show and Colonizer waitlists (the
+     Cratefield harness waitlist module, in shoal-ing/waitlist-backend). On any
+     failure the form says so and offers the address, rather than pretending
+     the email was saved. Without JS the form is a mailto. */
   var API = 'https://api.shoal.ing/v1/waitlist';
   var form = $('[data-form]');
   if (form) {
