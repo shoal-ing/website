@@ -205,7 +205,10 @@ reset after every attempt. If the script cannot load (a blocker, a network
 error, or nothing after 10 s) the form says so and offers the address; it
 never sends without a token. The `_headers` CSP allows
 `https://challenges.cloudflare.com` in `script-src` and `frame-src`, and
-nothing broader.
+nothing broader. It has no `'unsafe-inline'`: the theme snippet at the top of
+`index.html` is allowed by its sha256, and `tools/build-dist.sh` refuses to
+build if it changes without the hash, or if a page gains a `style=""`
+attribute or an inline event handler. `frame-ancestors 'none'`.
 
 **`www.shoal.ing`:** the Worker binds one hostname, the apex. A check solved on
 `www.shoal.ing` comes back from siteverify with that hostname and is refused,
