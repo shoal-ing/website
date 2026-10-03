@@ -248,6 +248,8 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 .signup__go { height: 44px; padding: 0 16px; border: 0; border-radius: 6px; background: var(--bio); color: var(--onbio); font: 600 14px var(--sans); cursor: pointer; white-space: nowrap; transition: opacity .2s; }
 .signup__go:hover { opacity: .88; }
 .signup__go:disabled { opacity: .6; cursor: progress; }
+.signup__human { width: min(100%, 560px); min-height: 65px; display: flex; justify-content: center; }
+.signup__human > div { width: 100%; }
 .signup__err { font: 400 14px/1.5 var(--mono); color: var(--coral); max-width: 560px; }
 .signup__err a { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
 .signup__done { display: flex; flex-direction: column; gap: 8px; align-items: center; padding: 20px 24px; border: 1px solid var(--bio); border-radius: 8px; background: var(--surface); box-shadow: 0 0 0 4px var(--bioring); font: 400 16px/1.5 var(--sans); }

@@ -9,7 +9,7 @@
 > installable or billed yet, and the pricing below is planned pricing.
 
 Site: https://shoal.ing/
-Early access: https://shoal.ing/#access (email)
+Early access: https://shoal.ing/#access (email, plus a Cloudflare Turnstile human check in the browser)
 Organization: https://github.com/shoal-ing
 Maker: Factory Zero (https://factory0.ventures)
 Contact: contact@shoal.ing
