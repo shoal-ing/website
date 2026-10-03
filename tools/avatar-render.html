@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!-- Source for assets/org-avatar.png (512x512). Regenerate with tools/render-og.sh -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 512px; height: 512px; overflow: hidden; background: #04121C; }
+  .a { position: relative; width: 512px; height: 512px; background: radial-gradient(ellipse at 50% 55%, rgba(94,242,214,.16), transparent 62%), #04121C; }
+  canvas { position: absolute; inset: 0; width: 512px; height: 512px; opacity: .55; }
+  svg { position: absolute; left: 96px; top: 106px; overflow: visible; filter: drop-shadow(0 0 18px rgba(94,242,214,.45)); }
+</style>
+</head>
+<body><div class="a">
+  <canvas id="f"></canvas>
+  <svg width="320" height="300" viewBox="-1 0 26 24" fill="none" stroke="#5EF2D6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l3 5-3 5" opacity=".7"/><path d="M10 5l4 7-4 7"/><path d="M18 8l2.5 4-2.5 4" opacity=".85"/></svg>
+</div>
+<script src="shoal-field.js"></script>
+<script>
+  shoalField(document.getElementById('f'), { w: 512, h: 512, seed: 3, scale: 1, snow: 60, schools: [
+    { x: 256, y: 256, r: 230, n: 500, g: 0, cw: 1 } ] });
+</script>
+</body>
+</html>

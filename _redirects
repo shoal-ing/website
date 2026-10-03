@@ -1,0 +1,8 @@
+# Redirects, applied by Cloudflare to the static assets.
+# Short, stable links for talks, READMEs and chat. Temporary (302) on purpose:
+# the targets may move.
+
+/github     https://github.com/shoal-ing     302
+/waitlist   /#access                         302
+/try        /#run                            302
+/pricing    /#pricing                        302

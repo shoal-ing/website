@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- Source for assets/og.png (1200x630). Regenerate with tools/render-og.sh -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #04121C; width: 1200px; height: 630px; overflow: hidden; }
+  .card { position: relative; width: 1200px; height: 630px; overflow: hidden; color: #F7FBFA; font-family: "Geist", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  canvas { position: absolute; inset: 0; width: 1200px; height: 630px; }
+  .glow { filter: blur(10px); opacity: .5; }
+  .fade { position: absolute; inset: 0; background: linear-gradient(90deg, #04121C 0%, #04121C 40%, rgba(4,18,28,0) 72%), radial-gradient(ellipse at 70% 40%, transparent 30%, rgba(0,0,0,.4) 100%); }
+  .content { position: absolute; left: 72px; top: 64px; bottom: 64px; width: 640px; display: flex; flex-direction: column; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand svg { overflow: visible; }
+  .word { font: 400 44px "Instrument Serif", serif; letter-spacing: -.01em; }
+  .word span { font: 400 27px "Geist Mono", monospace; color: #5EF2D6; }
+  h1 { margin: auto 0 0; font: 400 112px/.94 "Instrument Serif", serif; letter-spacing: -.02em; }
+  h1 em { color: #5EF2D6; }
+  p { margin: 26px 0 0; font-size: 23px; line-height: 1.45; color: #B3C4CB; max-width: 600px; }
+  .meta { margin-top: 30px; display: flex; gap: 22px; font: 400 15px "Geist Mono", monospace; color: #B3C4CB; letter-spacing: .02em; }
+  .meta b { font-weight: 400; color: #5EF2D6; }
+  .bubble { position: absolute; right: 64px; top: 92px; width: 340px; padding: 14px 16px; border: 1px solid #2A5878; border-radius: 8px; background: #0A1F2E; display: flex; flex-direction: column; gap: 7px; }
+  .bubble div:first-child { display: flex; gap: 10px; font: 500 12px "Geist Mono", monospace; letter-spacing: .06em; }
+  .bubble div:last-child { font-size: 16px; line-height: 1.45; }
+</style>
+</head>
+<body>
+<div class="card">
+  <canvas id="f"></canvas><canvas id="g" class="glow"></canvas>
+  <div class="fade"></div>
+  <div class="bubble"><div><span style="color:#FF7A59">OBJECTION</span><span style="color:#B3C4CB">sec_eng_0044</span></div><div>curl | sh on the landing page. Where is the signature?</div></div>
+  <div class="content">
+    <div class="brand">
+      <svg width="42" height="39" viewBox="-1 0 26 24" fill="none" stroke="#5EF2D6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l3 5-3 5" opacity=".7"/><path d="M10 5l4 7-4 7"/><path d="M18 8l2.5 4-2.5 4" opacity=".85"/></svg>
+      <span class="word">shoal<span>.ing</span></span>
+    </div>
+    <h1>Rehearse your <em>launch</em>.</h1>
+    <p>Thousands of simulated developers read your launch post before Hacker News does.</p>
+    <div class="meta"><span><b>›</b> predicted thread</span><span><b>›</b> top objections</span><span><b>›</b> edits that change it</span></div>
+  </div>
+</div>
+<script src="shoal-field.js"></script>
+<script>
+  var o = { w: 1200, h: 630, seed: 11, scale: 1.25, snow: 140, schools: [
+    { x: 880, y: 300, r: 150, n: 900, g: 0, cw: 1 },
+    { x: 1080, y: 470, r: 90, n: 380, g: 1, cw: 0 },
+    { x: 760, y: 500, r: 85, n: 300, g: 2, cw: 1 } ] };
+  shoalField(document.getElementById('f'), o);
+  var g = document.getElementById('g'); g.width = 1200; g.height = 630; g.getContext('2d').drawImage(document.getElementById('f'), 0, 0);
+</script>
+</body>
+</html>

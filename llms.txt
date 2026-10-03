@@ -1,0 +1,60 @@
+# Shoal
+
+> Shoal rehearses a software launch before it is posted. Paste a launch post
+> or README; thousands of simulated developers read it, upvote it, argue about
+> it and decide whether to install, on a simulated Hacker News, Reddit or X.
+> In under five minutes you get the predicted thread, the top objections and
+> the edits that change the outcome. Open-core, written in Rust,
+> self-hostable. Shoal is in early access: sign-up is by waitlist, nothing is
+> installable or billed yet, and the pricing below is planned pricing.
+
+Site: https://shoal.ing/
+Early access: https://shoal.ing/#access (email)
+Organization: https://github.com/shoal-ing
+Maker: Factory Zero (https://factory0.ventures)
+Contact: contact@shoal.ing
+Tagline: Rehearse your launch.
+For: founders, DevRel and product marketers shipping developer tools and AI products.
+Status: early access, by waitlist. Not generally available.
+
+## How it works
+
+1. Seed: Shoal parses your post or README into claims, calls to action and
+   install steps, then sets the venue, the posting time and a calibrated
+   baseline.
+2. Simulate: ten thousand agents from 38 developer segments read, vote and
+   reply over 48 simulated hours. Jev, the deterministic engine, decides who
+   acts and when. An LLM writes text only when an agent posts.
+3. Score: the predicted thread, sentiment over time, install intent by
+   segment, the top trust flags and the edits ranked by how much they change
+   the outcome.
+
+## Architecture
+
+One static Rust binary for Linux and macOS (arm64, x86_64), made of the Jev
+engine, a persona sampler, an LLM adapter (a local model or an API) and a
+scorer that writes the report.
+
+## Planned pricing (USD, early access, nothing billed yet)
+
+- Open source: free. The full CLI and Jev engine (MIT core), up to 1,000
+  agents per run, bring your own local or API model, community support.
+- Launch: $49 per rehearsal. 10,000 calibrated agents, Hacker News, Reddit
+  and X venues, full report and predicted thread, up to 3 A/B variants.
+- Team: $799 per month. 40 rehearsals a month, shared workspace and history,
+  talk to any agent, calibration against your past launches.
+- Enterprise: custom. Runs in your VPC or air-gapped, personas from your own
+  community data, SSO, audit log, SLA, signed builds and SBOM.
+  Contact: contact@shoal.ing.
+
+## Notes for machine readers
+
+- The "Try it" run on the page is a mock run against a sample post. Its log,
+  the 412 predicted points, the objection and the suggested edit are an
+  illustration of the report, not a result for a real launch.
+- The simulated comments in the hero (maintainer_0217, sec_eng_0044 and so
+  on) are sample agent output, not real users.
+- Shoal has published no usage numbers, customers, testimonials or
+  calibration results.
+- The install script (shoal.ing/install.sh, signed with cosign) is planned
+  and not published yet.

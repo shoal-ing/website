@@ -1,0 +1,15 @@
+{
+  "name": "Shoal",
+  "short_name": "Shoal",
+  "description": "Rehearse your launch. Paste your launch post; thousands of simulated developers read it, vote and argue, and you get the predicted thread and the edits that change the outcome.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#04121C",
+  "theme_color": "#04121C",
+  "icons": [
+    { "src": "/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
