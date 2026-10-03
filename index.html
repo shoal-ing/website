@@ -310,6 +310,7 @@ Open-core, written in Rust, self-hostable. Install: curl -fsSL shoal.ing/install
       <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@company.com" required aria-describedby="e-email">
       <button class="signup__go" type="submit"><span data-submit-label>Get early access</span></button>
     </form>
+    <div class="signup__human" role="group" aria-label="Human check" hidden data-captcha></div>
     <p class="signup__err" id="e-email" role="alert" hidden data-form-err></p>
     <div class="signup__done" role="status" hidden data-done>
       <p class="kick">YOU'RE ON THE LIST</p>

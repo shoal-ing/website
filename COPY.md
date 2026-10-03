@@ -12,6 +12,7 @@ change the page wherever the product differs.
 | Claim | Status | Source |
 | :--- | :--- | :--- |
 | In early access; sign-up by waitlist | True | This repository; the form posts to the waitlist |
+| The sign-up form asks for a Cloudflare Turnstile human check | True | `assets/shoal.js` renders the widget; `shoal-ing/waitlist-backend` verifies the token and refuses a join without one |
 | Nothing is installable or billed yet | True | No release, no install script, no billing exists |
 | Install script will be signed with cosign | Brief | Canvas "Verify signature" panel (`cosign verify-blob`) |
 | Planned pricing: Free / $49 per rehearsal / $799 per month / Custom | Brief | Canvas `PLANS` |

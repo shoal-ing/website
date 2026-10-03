@@ -177,7 +177,7 @@ scratch:
 
 ## The waitlist
 
-The form posts `{ email, product: "shoal" }` to
+The form posts `{ email, product: "shoal", captchaToken }` to
 `https://api.shoal.ing/v1/waitlist`, the same contract as the release.show,
 Colonizer and PosPlugin waitlists: a Cloudflare Worker running
 [Cratefield](https://cratefield.com)'s harness `waitlist` module with its own
@@ -186,14 +186,36 @@ D1 database. That worker is **live** (since 2026-10-03):
 (private), Worker `shoal-waitlist` on the Factory0 account, D1 database
 `shoal-waitlist`, custom domain `api.shoal.ing`. It allows the origins
 `https://shoal.ing` and `https://www.shoal.ing`, accepts `product: "shoal"`
-with no answers and no captcha, and answers a valid join with
-`202 {"ok":true}`. Signups are read with `wrangler d1 execute` from that repo
-(see its README). If the worker ever fails, the form says so and offers
-`contact@shoal.ing` instead of pretending the address was saved.
+with no answers, and answers a valid join with `202 {"ok":true}`. Signups are
+read with `wrangler d1 execute` from that repo (see its README). If the worker
+ever fails, the form says so and offers `contact@shoal.ing` instead of
+pretending the address was saved.
+
+### Human check (Cloudflare Turnstile)
+
+Under the field sits a Cloudflare Turnstile widget (Managed mode, site key
+`0x4AAAAAAFM4LLG5hjMxlWrK`, hostnames `shoal.ing` and `www.shoal.ing`).
+`assets/shoal.js` loads `https://challenges.cloudflare.com/turnstile/v0/api.js`
+itself (explicit render, action `waitlist`, theme following the page) and sends
+the token as `captchaToken`. The Worker verifies it with siteverify, bound to
+the hostname `shoal.ing` and the action `waitlist`, and refuses a join with a
+missing, invalid or mismatched token: `400`, problem type `…/captcha-failed`.
+The page then asks for the check again. A token is single-use, so the widget is
+reset after every attempt. If the script cannot load (a blocker, a network
+error, or nothing after 10 s) the form says so and offers the address; it
+never sends without a token. The `_headers` CSP allows
+`https://challenges.cloudflare.com` in `script-src` and `frame-src`, and
+nothing broader.
+
+**`www.shoal.ing`:** the Worker binds one hostname, the apex. A check solved on
+`www.shoal.ing` comes back from siteverify with that hostname and is refused,
+so `www` needs a Cloudflare Redirect Rule to the apex (operator task). On
+localhost the widget shows a domain error, which is expected: the site key is
+scoped to the two real hostnames.
 
 No confirmation mail is sent, so the success copy says "we'll email you when
-Shoal is ready to install", not "check your inbox". The `_headers` CSP already
-allows `connect-src https://api.shoal.ing`.
+Shoal is ready to install", not "check your inbox". The `_headers` CSP allows
+`connect-src https://api.shoal.ing`.
 
 ## House rules for edits
 

@@ -394,20 +394,79 @@
   }
 
   /* --------------------------------------------------------- 04 sign-up
-     Posts { email, product: "shoal" } to the waitlist Worker at api.shoal.ing,
-     the same contract as the release.show and Colonizer waitlists (the
-     Cratefield harness waitlist module, in shoal-ing/waitlist-backend). On any
-     failure the form says so and offers the address, rather than pretending
-     the email was saved. Without JS the form is a mailto. */
+     Posts { email, product: "shoal", captchaToken } to the waitlist Worker at
+     api.shoal.ing, the same contract as the release.show and Colonizer
+     waitlists (the Cratefield harness waitlist module, in
+     shoal-ing/waitlist-backend). captchaToken is a Cloudflare Turnstile token
+     from the widget under the form (action "waitlist"); the Worker verifies it
+     and refuses a join without one (400, problem type captcha-failed). A token
+     is single-use, so the widget is reset after every attempt. If the widget
+     cannot load, the form says so and offers the address instead of sending
+     without a token. On any failure the form says so and offers the address,
+     rather than pretending the email was saved. Without JS the form is a
+     mailto. */
   var API = 'https://api.shoal.ing/v1/waitlist';
+  var SITEKEY = '0x4AAAAAAFM4LLG5hjMxlWrK';
+  var TURNSTILE = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=shoalTurnstileReady';
+  var MAIL = '<a href="mailto:contact@shoal.ing?subject=Shoal%20early%20access">contact@shoal.ing</a>';
   var form = $('[data-form]');
   if (form) {
     var email = form.elements.email;
     var err = $('[data-form-err]');
     var go = $('.signup__go', form);
     var label = $('[data-submit-label]', form);
+    var human = $('[data-captcha]');
+    var token = null, widget = null, broken = false;
     var fail = function (html) { err.innerHTML = html; err.hidden = false; };
     var ok = function () { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim()); };
+    var unavailable = function () {
+      broken = true; token = null;
+      if (human) human.hidden = true;
+      fail('! The human check didn\'t load, so the form can\'t send. A content blocker may be stopping challenges.cloudflare.com. Reload to try again, or email ' + MAIL + '.');
+    };
+
+    /* Turnstile, rendered explicitly into [data-captcha] once its script loads.
+       Its theme follows the page's; a theme switch re-renders it while it holds
+       no token. */
+    var render = function () {
+      if (!window.turnstile || !human) return;
+      if (widget !== null) { window.turnstile.remove(widget); widget = null; }
+      human.innerHTML = '';
+      var box = document.createElement('div');
+      human.appendChild(box);
+      widget = window.turnstile.render(box, {
+        sitekey: SITEKEY,
+        action: 'waitlist',
+        theme: th.dark ? 'dark' : 'light',
+        size: 'flexible',
+        callback: function (t) {
+          token = t; broken = false;
+          if (/human check/.test(err.textContent)) err.hidden = true;
+        },
+        'expired-callback': function () { token = null; },
+        'timeout-callback': function () { token = null; },
+        'error-callback': function () {
+          token = null;
+          fail('! The human check hit an error. Reload the page and try again, or email ' + MAIL + '.');
+          return true;
+        }
+      });
+    };
+    var reset = function () {
+      token = null;
+      if (window.turnstile && widget !== null) window.turnstile.reset(widget);
+    };
+    if (human) {
+      human.hidden = false;
+      window.shoalTurnstileReady = function () { clearTimeout(waited); render(); };
+      var tag = document.createElement('script');
+      tag.src = TURNSTILE; tag.async = true; tag.defer = true;
+      tag.onerror = function () { clearTimeout(waited); unavailable(); };
+      var waited = setTimeout(function () { if (!window.turnstile) unavailable(); }, 10000);
+      document.head.appendChild(tag);
+      if (themeBtn) themeBtn.addEventListener('click', function () { if (!token && widget !== null) render(); });
+    }
+
     email.addEventListener('input', function () {
       if (email.getAttribute('aria-invalid') === 'true' && ok()) { email.setAttribute('aria-invalid', 'false'); err.hidden = true; }
     });
@@ -421,22 +480,37 @@
         return;
       }
       email.setAttribute('aria-invalid', 'false');
+      if (broken || !window.turnstile) { unavailable(); return; }
+      if (!token) {
+        fail('! One more step: complete the human check below the field, then send.');
+        return;
+      }
       go.disabled = true;
       label.textContent = 'Sending…';
-      var body = { email: email.value.trim(), product: 'shoal' };
+      var body = { email: email.value.trim(), product: 'shoal', captchaToken: token };
       fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
         .then(function (res) {
-          if (!res.ok) throw new Error(String(res.status));
+          if (res.ok) return null;
+          return res.json().catch(function () { return null; }).then(function (p) {
+            var type = p && typeof p.type === 'string' ? p.type : '';
+            throw new Error(/\/captcha-failed$/.test(type) ? 'captcha' : String(res.status));
+          });
+        })
+        .then(function () {
           $('[data-done-email]').textContent = body.email;
           form.hidden = true;
+          if (human) human.hidden = true;
           $('[data-done]').hidden = false;
         })
         .catch(function (x) {
-          fail(Number(x && x.message) === 429
-            ? '! Too many tries. Give it a minute, then send again.'
-            : '! That didn\'t go through. Try again, or email <a href="mailto:contact@shoal.ing?subject=Shoal%20early%20access">contact@shoal.ing</a>.');
+          var why = x && x.message;
+          fail(why === 'captcha'
+            ? '! The human check didn\'t go through. It has been reset: complete it again, then send.'
+            : Number(why) === 429
+              ? '! Too many tries. Give it a minute, then send again.'
+              : '! That didn\'t go through. Try again, or email ' + MAIL + '.');
         })
-        .then(function () { go.disabled = false; label.textContent = 'Get early access'; });
+        .then(function () { reset(); go.disabled = false; label.textContent = 'Get early access'; });
     });
   }
 })();
