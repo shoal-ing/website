@@ -181,14 +181,15 @@ The form posts `{ email, product: "shoal" }` to
 `https://api.shoal.ing/v1/waitlist`, the same contract as the release.show,
 Colonizer and PosPlugin waitlists: a Cloudflare Worker running
 [Cratefield](https://cratefield.com)'s harness `waitlist` module with its own
-D1 database. That worker **does not exist yet.** Until it does, every
-submission fails, and the form says so and offers `contact@shoal.ing` instead
-of pretending the address was saved. To turn it on:
-
-1. Create `shoal-ing/waitlist-backend` from `colonizer-waitlist-backend`, with
-   its own D1 database and the route `api.shoal.ing`.
-2. Allow the origin `https://shoal.ing`.
-3. Deploy it, and submit the form once on the live site.
+D1 database. That worker is **live** (since 2026-10-03):
+[`shoal-ing/waitlist-backend`](https://github.com/shoal-ing/waitlist-backend)
+(private), Worker `shoal-waitlist` on the Factory0 account, D1 database
+`shoal-waitlist`, custom domain `api.shoal.ing`. It allows the origins
+`https://shoal.ing` and `https://www.shoal.ing`, accepts `product: "shoal"`
+with no answers and no captcha, and answers a valid join with
+`202 {"ok":true}`. Signups are read with `wrangler d1 execute` from that repo
+(see its README). If the worker ever fails, the form says so and offers
+`contact@shoal.ing` instead of pretending the address was saved.
 
 No confirmation mail is sent, so the success copy says "we'll email you when
 Shoal is ready to install", not "check your inbox". The `_headers` CSP already
