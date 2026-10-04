@@ -135,7 +135,7 @@
       var u = Math.random(); g[i] = u < 0.58 ? 0 : u < 0.82 ? 1 : 2;
     }
     var snow = []; for (i = 0; i < 160; i++) snow.push([Math.random(), Math.random(), 0.4 + Math.random() * 0.9, 0.05 + Math.random() * 0.15]);
-    var s = { mode: 0, prog: 0, t: 0, mouse: null, pm: null, mv: 0, rip: [], n: DENSITY, spk: [], ci: 0, init: false, cards: [] };
+    var s = { mode: 0, prog: 0, t: 0, mouse: null, pm: null, mv: 0, rip: [], n: DENSITY, spk: [], ci: 0, init: false, cards: [], hov: -1, pin: 0 };
     var mob = function () { return W < 760; };
     var cen = function () {
       return mob() ? [[W * 0.5, H * 0.2], [W * 0.82, H * 0.42], [W * 0.2, H * 0.4]]
@@ -235,13 +235,15 @@
         }
         lum[i] *= dec;
         vx[i] += fx * f; vy[i] += fy * f;
-        var v = Math.sqrt(vx[i] * vx[i] + vy[i] * vy[i]), vmax = 2.4 * (0.75 + 0.45 * z[i]);
-        if (v > vmax) { vx[i] *= vmax / v; vy[i] *= vmax / v; } else if (v < 0.6 && v > 0) { vx[i] *= 0.6 / v; vy[i] *= 0.6 / v; }
+        var v = Math.sqrt(vx[i] * vx[i] + vy[i] * vy[i]), vmax = 2.4 * (0.75 + 0.45 * z[i]), vmin = 0.6;
+        if (i === s.hov) { vmax *= 0.3; vmin = 0.25; }
+        if (v > vmax) { vx[i] *= vmax / v; vy[i] *= vmax / v; } else if (v < vmin && v > 0) { vx[i] *= vmin / v; vy[i] *= vmin / v; }
         x[i] += vx[i] * f; y[i] += vy[i] * f;
         if (x[i] < -10) x[i] += W + 20; else if (x[i] > W + 10) x[i] -= W + 20;
         if (y[i] < -10) y[i] += H + 20; else if (y[i] > H + 10) y[i] -= H + 20;
       }
       s.spk.forEach(function (p) { lum[p.i] = 1; });
+      if (s.hov >= 0) lum[s.hov] = 1;
       snow.forEach(function (p) {
         p[1] += p[3] * f / H; p[0] += Math.sin(s.t * 0.5 + p[1] * 7) * 0.00006 * f;
         if (p[1] > 1.01) { p[1] = -0.01; p[0] = Math.random(); }
@@ -279,6 +281,12 @@
         ctx.strokeStyle = rgba(col, 0.75); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(ax, ay); ctx.stroke();
         ctx.beginPath(); ctx.arc(fx, fy, 8 + Math.sin(s.t * 5) * 1.5, 0, 6.283); ctx.stroke();
       });
+      if (s.hov >= 0 && s.hov < n) {
+        var hc = s.mode && s.hov < rev ? cols[g[s.hov]] : th.bio;
+        ctx.strokeStyle = rgba(hc, 0.9); ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(x[s.hov], y[s.hov], 9, 0, 6.283); ctx.stroke();
+        ctx.strokeStyle = rgba(hc, 0.3); ctx.beginPath(); ctx.arc(x[s.hov], y[s.hov], 14, 0, 6.283); ctx.stroke(); ctx.lineWidth = 1;
+      }
       if (s.mode) {
         var kk = 10000 / n, cnt = [0, 0, 0], C = cen();
         for (i = 0; i < rev; i++) cnt[g[i]]++;
@@ -304,8 +312,79 @@
       glowCv.style.opacity = String(GLOW * (dark ? 0.9 : 0.2));
       glowCv.style.mixBlendMode = dark ? 'screen' : 'multiply';
     };
+    /* Hover: the fish nearest a point, from the same spatial grid the flocking
+       uses. Only the cells within R are visited, and nothing is allocated. */
+    s.nearest = function (px, py, R) {
+      if (!head) return -1;
+      var best = -1, bd = R * R, r = Math.ceil(R / CS), gx = (px / CS) | 0, gy = (py / CS) | 0;
+      for (var yy = gy - r; yy <= gy + r; yy++) {
+        if (yy < 0 || yy >= GH) continue;
+        for (var xx = gx - r; xx <= gx + r; xx++) {
+          if (xx < 0 || xx >= GW) continue;
+          for (var j = head[yy * GW + xx]; j >= 0; j = nx[j]) {
+            var dx = x[j] - px, dy = y[j] - py, d2 = dx * dx + dy * dy;
+            if (d2 < bd) { bd = d2; best = j; }
+          }
+        }
+      }
+      return best;
+    };
+    /* A fish in open water, clear of the copy, for the keyboard button. */
+    s.anyFish = function () {
+      var m = mob(), n = s.n;
+      for (var t = 0; t < 400; t++) {
+        var j = (Math.random() * n) | 0;
+        if (j !== s.hov && (m ? y[j] > 110 && y[j] < H * 0.4 && x[j] > 30 && x[j] < W - 30 : x[j] > W * 0.56 && x[j] < W - 320 && y[j] > 140 && y[j] < H - 200)) return j;
+      }
+      return (Math.random() * n) | 0;
+    };
+    s.at = function (i, o) { o.x = x[i]; o.y = y[i]; o.g = s.mode && i < s.n * Math.min(1, s.prog * 2) ? g[i] : -1; o.W = W; o.H = H; return o; };
+    /* Called once a frame (or on each pointer event when motion is reduced):
+       keep the fish under the pointer while it stays close, else take the nearest. */
+    s.track = function (now) {
+      if (s.pin && now > s.pin) { s.pin = 0; s.hov = -1; }
+      if (s.pin) return;
+      var m = s.mouse;
+      if (!m) { s.hov = -1; return; }
+      var h = s.hov;
+      if (h >= 0 && h < s.n) { var dx = x[h] - m.x, dy = y[h] - m.y; if (dx * dx + dy * dy < 4900) return; }
+      s.hov = s.nearest(m.x, m.y, 30);
+    };
     return s;
   }
+
+  /* ------------------------------------------------------------- who's who
+     Each fish is a simulated developer with a stable persona, derived from its
+     index, and an activity that changes every few seconds. While a rehearsal
+     runs, the activity follows the fish's school: praise, question or
+     objection. None of these are real people; the card says so. */
+  var ROLES = ['backend', 'frontend', 'SRE', 'security engineer', 'data engineer', 'ML engineer', 'indie hacker', 'OSS maintainer',
+    'DevRel', 'platform engineer', 'mobile dev', 'startup CTO', 'staff engineer', 'student'];
+  var STACKS = ['Go', 'Rust', 'TypeScript', 'Python', 'Java', 'Kotlin', 'Elixir', 'Ruby', 'C++', 'Swift', 'PHP', 'Zig', 'C#'];
+  var VENUES = [['Hacker News', 'HN', 'upvoted on HN'], ['r/programming', 'r/programming', 'upvoted on r/programming'],
+    ['r/selfhosted', 'r/selfhosted', 'upvoted on r/selfhosted'], ['X', 'X', 'reposted it on X']];
+  var IDLE = ['reading the README', 'reading the launch post on %', 'scrolling %', 'skimming the comments', 'opened the repo',
+    'checking the install steps', 'deciding whether to install', 'looking at the GitHub stars'];
+  var ACTS = [
+    ['@', 'installed it', 'starred the repo', 'shared on X', 'commenting: "Single binary, finally. Trying it tonight."',
+      'running the quickstart', 'sent it to the team Slack', 'bookmarked it for Monday'],
+    ['commenting: "How is this different from Playwright?"', 'asking: "Does it run offline?"', 'looking for the pricing page',
+      'reading the docs', 'asking: "Which model writes the comments?"', 'comparing it with what they use now', 'asking: "Is there a self-host guide?"'],
+    ['skeptical: no pricing page', 'skeptical: "simulated users" sounds circular', 'flagged: curl | sh with no signature',
+      'downvoted', 'closed the tab', 'commenting: "Where are the benchmarks?"', 'skeptical: no self-host docs']
+  ];
+  var hsh = function (a) {
+    a = Math.imul(a ^ (a >>> 16), 0x45d9f3b); a = Math.imul(a ^ (a >>> 16), 0x45d9f3b);
+    return (a ^ (a >>> 16)) >>> 0;
+  };
+  var venueOf = function (i) { var u = hsh(i * 5 + 3) % 100; return VENUES[u < 40 ? 0 : u < 60 ? 1 : u < 75 ? 2 : 3]; };
+  var personaOf = function (i) { return ROLES[hsh(i * 5 + 1) % ROLES.length] + ', ' + STACKS[hsh(i * 5 + 2) % STACKS.length] + ' · via ' + venueOf(i)[1]; };
+  var devId = function (i) { return 'DEV #' + (hsh(i * 5 + 4) % 10000); };
+  var activityOf = function (i, grp, slot) {
+    var r = hsh(i * 7919 + slot), list = grp < 0 ? (r % 10 < 6 ? IDLE : ACTS[[0, 0, 0, 1, 2][hsh(i) % 5]]) : ACTS[grp];
+    var a = list[(r >>> 4) % list.length], v = venueOf(i);
+    return a === '@' ? v[2] : a.replace('%', v[1]);
+  };
 
   if (hero && cv && glowCv && cv.getContext && window.Path2D) {
     sim = makeShoal();
@@ -319,9 +398,65 @@
     resize();
     var vis = true;
     if (window.IntersectionObserver) new IntersectionObserver(function (es) { vis = es[0].isIntersecting; }).observe(hero);
-    hero.addEventListener('pointermove', function (e) { if (e.pointerType === 'touch') return; sim.mouse = pt(e); if (reduced) sim.draw(); });
-    hero.addEventListener('pointerleave', function () { sim.mouse = null; });
-    hero.addEventListener('pointerdown', function (e) { if (e.target.closest('a, button')) return; var p = pt(e); sim.click(p.x, p.y); });
+    var tipEl = $('[data-tip]'), tipIdEl = $('[data-tip-id]'), tipWho = $('[data-tip-who]'), tipAct = $('[data-tip-act]');
+    var tipLive = $('[data-tip-live]'), tipBtn = $('[data-tip-btn]');
+    var tip = { i: -1, key: -1, w: 0, h: 0, tx: -1, ty: -1 }, fo = { x: 0, y: 0, g: -1, W: 0, H: 0 };
+    /* Draw the card for sim.hov: text only when the fish or its activity
+       changes, position every frame, rounded so unchanged frames write nothing. */
+    var renderTip = function (now) {
+      sim.track(now);
+      var i = sim.hov;
+      if (i < 0) { if (tip.i >= 0) { tipEl.hidden = true; tip.i = -1; } return; }
+      var f = sim.at(i, fo), slot = Math.floor(now / 1000 / (3.5 + (hsh(i) % 30) / 10) + (hsh(i + 9) % 7)), key = slot * 4 + f.g + 1;
+      if (i !== tip.i) { tipIdEl.textContent = devId(i); tipWho.textContent = personaOf(i); tip.key = -1; tipEl.hidden = false; }
+      if (key !== tip.key) {
+        tipAct.textContent = activityOf(i, f.g, slot);
+        tipEl.className = 'bubble tip' + (f.g > 0 ? ' g' + f.g : '');
+        tip.key = key; tip.w = tipEl.offsetWidth; tip.h = tipEl.offsetHeight;
+      }
+      tip.i = i;
+      var w = tip.w, lx = f.x + 18, ty = f.y - tip.h - 16;
+      if (lx + w > f.W - 12) lx = f.x - 18 - w;
+      if (ty < 80) ty = f.y + 18;
+      lx = Math.round(Math.max(12, Math.min(f.W - w - 12, lx)));
+      ty = Math.round(Math.max(80, Math.min(f.H - tip.h - 12, ty)));
+      if (lx !== tip.tx || ty !== tip.ty) { tip.tx = lx; tip.ty = ty; tipEl.style.transform = 'translate(' + lx + 'px,' + ty + 'px)'; }
+    };
+    var refresh = function () { if (reduced) { renderTip(performance.now()); sim.draw(); } };
+    var announce = function () {
+      var i = sim.hov; if (i < 0) return;
+      tipLive.textContent = 'Simulated developer ' + tipIdEl.textContent.replace('DEV ', '') + ', ' + tipWho.textContent.replace(' · via ', ', from ') + ': ' + tipAct.textContent + '.';
+    };
+    if (window.matchMedia && window.matchMedia('(hover: none)').matches) tipBtn.textContent = 'Tap a fish to see what it’s doing';
+
+    hero.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      sim.mouse = pt(e);
+      if (sim.pin && !e.target.closest('[data-tip-btn]')) sim.pin = 0;
+      refresh();
+    });
+    hero.addEventListener('pointerleave', function () { sim.mouse = null; refresh(); });
+    hero.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('a, button')) return;
+      var p = pt(e);
+      sim.click(p.x, p.y);
+      /* No hover on touch: a tap near a fish shows its card for a few seconds. */
+      if (e.pointerType !== 'mouse') {
+        var j = sim.nearest(p.x, p.y, 44);
+        if (j >= 0) { sim.hov = j; sim.pin = performance.now() + 6000; refresh(); if (reduced) setTimeout(refresh, 6100); }
+      }
+    });
+    /* Keyboard (and anyone without a pointer): the hint is a button that picks a
+       fish in open water and holds its card; again for another, Escape to close.
+       Only this path speaks to the live region, so hovering stays quiet. */
+    tipBtn.addEventListener('click', function () {
+      sim.hov = sim.anyFish(); sim.pin = Infinity; tip.i = -1;
+      refresh(); if (!reduced) renderTip(performance.now());
+      announce();
+    });
+    var unpin = function () { if (sim.pin === Infinity) { sim.pin = 0; sim.hov = -1; refresh(); } };
+    tipBtn.addEventListener('blur', unpin);
+    tipBtn.addEventListener('keydown', function (e) { if (e.key === 'Escape') { unpin(); tipLive.textContent = ''; } });
 
     var toggle = $('[data-hero-toggle]'), hLabel = $('[data-hero-label]'), hIcon = $('[data-hero-icon]');
     var hIdle = $('[data-idle]'), hOn = $('[data-on]');
@@ -341,7 +476,7 @@
       var tick = function (now) {
         var dt = Math.min(0.05, (now - last) / 1000); last = now;
         tickLogo(dt);
-        if (vis) { sim.step(dt); sim.draw(); }
+        if (vis) { sim.step(dt); renderTip(now); sim.draw(); }
         requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);

@@ -154,7 +154,7 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 .bubble__head { display: flex; gap: 10px; font: 500 11px var(--mono); letter-spacing: .06em; }
 .bubble__head span:last-child { color: var(--muted); }
 .bubble__text { font: 400 15px/1.45 var(--sans); color: var(--fg); text-wrap: pretty; }
-.hero__inner { position: absolute; left: clamp(16px, 6vw, 96px); right: clamp(16px, 6vw, 96px); bottom: clamp(40px, 9vh, 96px); max-width: 640px; display: flex; flex-direction: column; gap: 24px; pointer-events: none; }
+.hero__inner { position: absolute; left: clamp(16px, 6vw, 96px); right: clamp(16px, 6vw, 96px); bottom: clamp(32px, 7vh, 80px); max-width: 640px; display: flex; flex-direction: column; gap: 20px; pointer-events: none; }
 .hero__inner a, .hero__inner button { pointer-events: auto; }
 .hero__tags { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .hero__h { font: 400 clamp(56px, 8.4vw, 116px)/.94 var(--serif); letter-spacing: -.02em; }
@@ -162,7 +162,33 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 .hero__lede { font: 400 clamp(17px, 1.4vw, 20px)/1.6 var(--sans); color: var(--muted); max-width: 520px; text-wrap: pretty; }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .hero__meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font: 400 13px var(--mono); color: var(--muted); }
-.hero__hint { color: var(--fg); }
+.hero__hint { font: 400 13px var(--mono); color: var(--muted); }
+.hero__inner .hero__fishbtn { padding: 0; border: 0; background: none; color: var(--fg); font: inherit; cursor: pointer; text-decoration: underline dotted; text-decoration-color: var(--line2); text-underline-offset: 4px; }
+.hero__fishbtn:hover { color: var(--bio); text-decoration-color: var(--bio); }
+
+/* Paste → Simulate → Fix: one line, tiny stroke icons. */
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font: 500 13px var(--mono); letter-spacing: .04em; color: var(--fg); }
+.flow li { display: inline-flex; align-items: center; gap: 7px; }
+.flow li + li::before { content: "→"; margin-right: 3px; color: var(--muted); }
+.flow svg { width: 16px; height: 16px; fill: none; stroke: var(--bio); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+/* The example prediction: one row per venue, with its recognisable mark. */
+.pred { margin: 0; max-width: 520px; display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border: 1px solid var(--line2); border-radius: 8px; background: color-mix(in srgb, var(--surface) 72%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.pred__cap { font: 500 11px var(--mono); letter-spacing: .08em; color: var(--muted); }
+.pred__rows { display: flex; flex-direction: column; gap: 9px; }
+.pred__row { display: flex; align-items: flex-start; gap: 10px; font: 400 15px/1.35 var(--sans); color: var(--muted); }
+.pred__row b { font-weight: 500; color: var(--fg); margin-right: 6px; }
+.pred__ic { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+.pred__ic--x { fill: var(--fg); }
+.pred__sub { display: block; font: 400 12px/1.5 var(--mono); color: var(--coral); }
+
+/* The hover card: who a fish is and what it is doing. It follows its fish and never takes the pointer. */
+.tip { left: 0; top: 0; width: 264px; gap: 4px; padding: 10px 12px; pointer-events: none; z-index: 2; box-shadow: 0 12px 32px -16px rgba(0, 0, 0, .6); will-change: transform; }
+.tip .bubble__head { color: var(--bio); }
+.tip.g1 .bubble__head { color: var(--plank); }
+.tip.g2 .bubble__head { color: var(--coral); }
+.tip__who { font: 400 12px var(--mono); color: var(--muted); }
+.tip .bubble__text { font-size: 14px; }
 
 /* ------------------------------------------------------------------ sections */
 .sec { border-top: 1px solid var(--line); padding: clamp(72px, 10vw, 128px) var(--gutter); }
@@ -268,6 +294,15 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
   .iconbtn--menu { display: flex; }
   .hero__fade { background: linear-gradient(0deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 46%, color-mix(in srgb, var(--bg) 40%, transparent) 66%, transparent 86%); }
   .btn--code { font-size: 13px; }
+}
+@media (max-width: 859px) {
+  /* On a phone the copy decides the height: open water above it, never cut off at the top. */
+  .hero { height: auto; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: max(200px, 26svh) 0 32px; }
+  .hero__inner { position: relative; left: auto; right: auto; bottom: auto; margin: 0 16px; gap: 14px; }
+  .hero__tags .chip { display: none; }
+  .pred { padding: 12px 14px; gap: 8px; }
+  .pred__row { font-size: 14px; }
+  .hero__meta { display: none; }
 }
 @media (max-width: 420px) {
   .hero__h { font-size: 52px; }

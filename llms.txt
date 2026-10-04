@@ -54,6 +54,10 @@ scorer that writes the report.
   illustration of the report, not a result for a real launch.
 - The simulated comments in the hero (maintainer_0217, sec_eng_0044 and so
   on) are sample agent output, not real users.
+- The hero's "example prediction" (Hacker News #3 and 412 points, 61%
+  positive on r/programming, 38 reposts on X) is an illustration, not a
+  result. The hover cards on the hero fish (DEV #482 and so on) describe
+  simulated developers, not real people.
 - Shoal has published no usage numbers, customers, testimonials or
   calibration results.
 - The install script (shoal.ing/install.sh, signed with cosign) is planned
