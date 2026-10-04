@@ -125,7 +125,7 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 .card--hl { border-color: var(--bio); box-shadow: 0 0 0 4px var(--bioring); }
 
 /* ------------------------------------------------------------------ nav */
-.nav { position: sticky; top: 0; z-index: 20; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 clamp(16px, 3vw, 32px); background: var(--bg); border-bottom: 1px solid var(--line); overflow: visible; }
+.nav { position: sticky; top: 0; z-index: 20; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 clamp(16px, 3vw, 32px); background: color-mix(in srgb, var(--bg) 62%, transparent); -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2); border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent); overflow: visible; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand:hover { color: var(--fg); }
 .mark { overflow: visible; display: block; }
@@ -139,14 +139,16 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 .menu a:last-child { border-bottom: 0; }
 
 /* ------------------------------------------------------------------ hero */
-.hero { position: relative; height: calc(100vh - 68px); height: calc(100svh - 68px); min-height: 640px; max-height: 900px; overflow: hidden; background: var(--bg); }
+/* Full-screen hero: it starts under the translucent sticky nav and fills the viewport. */
+.hero { position: relative; margin-top: -68px; height: 100vh; height: 100svh; min-height: 640px; overflow: hidden; background: var(--bg); }
 .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero__cv { touch-action: pan-y; }
 .hero__glow { filter: blur(12px); mix-blend-mode: screen; pointer-events: none; opacity: .54; }
 :root[data-theme="light"] .hero__glow { mix-blend-mode: multiply; opacity: .12; }
 .hero__vig, .hero__fade { position: absolute; inset: 0; pointer-events: none; }
 .hero__vig { background: radial-gradient(ellipse at 65% 40%, transparent 30%, var(--vig) 100%); }
-.hero__fade { background: linear-gradient(90deg, var(--bg) 0%, var(--bg) min(46%, 640px), transparent min(78%, 1000px)); }
+/* A soft scrim behind the copy instead of a solid panel, so the shoal reads as the whole background. */
+.hero__fade { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 78%, transparent) 0%, color-mix(in srgb, var(--bg) 58%, transparent) min(40%, 560px), transparent min(72%, 980px)), linear-gradient(0deg, color-mix(in srgb, var(--bg) 55%, transparent) 0%, transparent 38%); }
 .hero__cards { position: absolute; inset: 0; pointer-events: none; }
 .bubble { position: absolute; width: 340px; max-width: calc(100% - 32px); display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--line2); border-radius: 8px; background: var(--surface); }
 .bubble__head { display: flex; gap: 10px; font: 500 11px var(--mono); letter-spacing: .06em; }
@@ -264,7 +266,7 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 @media (max-width: 859px) {
   .nav__links, .nav__cta { display: none; }
   .iconbtn--menu { display: flex; }
-  .hero__fade { background: linear-gradient(0deg, var(--bg) 0%, var(--bg) 52%, color-mix(in srgb, var(--bg) 70%, transparent) 64%, transparent 84%); }
+  .hero__fade { background: linear-gradient(0deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 46%, color-mix(in srgb, var(--bg) 40%, transparent) 66%, transparent 86%); }
   .btn--code { font-size: 13px; }
 }
 @media (max-width: 420px) {
