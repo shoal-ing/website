@@ -159,11 +159,11 @@
       var c = COMMENTS[k], n = s.n, m = mob(), pick = -1;
       for (var t = 0; t < 300; t++) {
         var j = (Math.random() * n) | 0;
-        if (g[j] === c.g && (m ? y[j] < H * 0.5 && y[j] > 90 : x[j] > W * 0.56 && x[j] < W - 40 && y[j] > 100 && y[j] < H - 60)) { pick = j; break; }
+        if (g[j] === c.g && (m ? y[j] < H * 0.5 && y[j] > 90 : Math.abs(x[j] - W * 0.5) > 420 && x[j] > 40 && x[j] < W - 40 && y[j] > 100 && y[j] < H - 60)) { pick = j; break; }
       }
       if (pick < 0) pick = (Math.random() * n) | 0;
       lum[pick] = 1;
-      var cx = m ? 16 : Math.max(W * 0.55, Math.min(W - 372, x[pick] + 30));
+      var cx = m ? 16 : (x[pick] > W * 0.5 ? Math.max(W * 0.5 + 400, Math.min(W - 372, x[pick] + 30)) : Math.max(16, Math.min(W * 0.5 - 740, x[pick] - 372)));
       var cy = m ? 20 : Math.max(24, Math.min(H - 170, y[pick] - 96));
       s.spk = s.spk.concat([{ i: pick, cx: cx, cy: cy }]).slice(m ? -1 : -2);
       s.cards = s.cards.concat([{ tag: c.tag, color: c.color, who: c.who, text: c.text, x: Math.round(cx), y: Math.round(cy) }]).slice(m ? -1 : -2);
@@ -189,7 +189,7 @@
         var k = cy * GW + cx; nx[i] = head[k]; head[k] = i;
       }
       var C = cen(), mb = mob();
-      var wx = mb ? W * 0.5 + Math.cos(s.t * 0.21) * W * 0.3 : W * 0.56 + Math.cos(s.t * 0.21) * W * 0.3;
+      var wx = mb ? W * 0.5 + Math.cos(s.t * 0.21) * W * 0.3 : W * 0.5 + Math.cos(s.t * 0.21) * W * 0.36;
       var wy = mb ? H * 0.3 + Math.sin(s.t * 0.29) * H * 0.14 : H * 0.44 + Math.sin(s.t * 0.29) * H * 0.2;
       var rev = s.mode ? n * Math.min(1, s.prog * 2) : 0, CS2 = CS * CS, dec = Math.pow(0.22, dt * SPEED);
       for (i = 0; i < n; i++) {
@@ -334,7 +334,7 @@
       var m = mob(), n = s.n;
       for (var t = 0; t < 400; t++) {
         var j = (Math.random() * n) | 0;
-        if (j !== s.hov && (m ? y[j] > 110 && y[j] < H * 0.4 && x[j] > 30 && x[j] < W - 30 : x[j] > W * 0.56 && x[j] < W - 320 && y[j] > 140 && y[j] < H - 200)) return j;
+        if (j !== s.hov && (m ? y[j] > 110 && y[j] < H * 0.4 && x[j] > 30 && x[j] < W - 30 : Math.abs(x[j] - W * 0.5) > 420 && x[j] > 40 && x[j] < W - 320 && y[j] > 140 && y[j] < H - 200)) return j;
       }
       return (Math.random() * n) | 0;
     };
@@ -362,7 +362,7 @@
     'DevRel', 'platform engineer', 'mobile dev', 'startup CTO', 'staff engineer', 'student'];
   var STACKS = ['Go', 'Rust', 'TypeScript', 'Python', 'Java', 'Kotlin', 'Elixir', 'Ruby', 'C++', 'Swift', 'PHP', 'Zig', 'C#'];
   var VENUES = [['Hacker News', 'HN', 'upvoted on HN'], ['r/programming', 'r/programming', 'upvoted on r/programming'],
-    ['r/selfhosted', 'r/selfhosted', 'upvoted on r/selfhosted'], ['X', 'X', 'reposted it on X']];
+    ['r/selfhosted', 'r/selfhosted', 'upvoted on r/selfhosted'], ['X', 'X', 'reposted it on X'], ['Product Hunt', 'Product Hunt', 'upvoted it on Product Hunt']];
   var IDLE = ['reading the README', 'reading the launch post on %', 'scrolling %', 'skimming the comments', 'opened the repo',
     'checking the install steps', 'deciding whether to install', 'looking at the GitHub stars'];
   var ACTS = [

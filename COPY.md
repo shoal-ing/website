@@ -44,7 +44,8 @@ change the page wherever the product differs.
 | The mock run: its log, 412 predicted points, the objection and the +64 pts edit | "This is a mock run against the sample post below" |
 | The sample post (a Show HN for Shoal itself) | Same |
 | Simulated comments in the hero (maintainer_0217, sec_eng_0044, …) | They appear only while "Rehearse a launch" runs, under "SIMULATING 10,000 AGENTS"; `llms.txt` notes them |
-| Hero example prediction: Hacker News peaks at #3 · 412 points, top objection "install script with no signature"; r/programming 61% positive; X 38 reposts | Captioned "EXAMPLE PREDICTION · SIMULATED, NOT REAL RESULTS". The HN line repeats the mock run (412 points, peak #3, the signature objection); the Reddit and X figures are illustrative and come from no run |
+| Hero audience line: "Built for Founders · DevRel · Product marketers, launching dev tools and AI products" | Who the product is aimed at; a positioning statement, not a customer claim |
+| Hero example prediction: Hacker News peaks at #3 · 412 points, top objection "install script with no signature"; r/programming 61% positive; X 38 reposts; Product Hunt #2 Product of the Day · 640 upvotes | Captioned "EXAMPLE PREDICTION · SIMULATED, NOT REAL RESULTS". The HN line repeats the mock run (412 points, peak #3, the signature objection); the Reddit, X and Product Hunt figures are illustrative and come from no run |
 | Hover cards on the hero fish (DEV #482, a role and stack, the venue it came from, what it is doing) | Each card is headed "SIMULATED DEV" and the hint's description says each fish is a simulated developer, not a real person. Personas and activities are picked in `assets/shoal.js` from fixed lists by the fish's index and the clock; they are not output of the product |
 
 ## Removed from the canvas
