@@ -145,6 +145,8 @@
   <div class="hero__vig" aria-hidden="true"></div>
   <div class="hero__fade" aria-hidden="true"></div>
   <div class="hero__cards" aria-live="polite" data-cards></div>
+  <div class="bubble tip" aria-hidden="true" hidden data-tip><div class="bubble__head"><span data-tip-id></span><span>SIMULATED DEV</span></div><div class="tip__who" data-tip-who></div><div class="bubble__text" data-tip-act></div></div>
+  <p class="sr" aria-live="polite" data-tip-live></p>
   <div class="hero__inner">
     <div class="hero__tags">
       <span class="chip"><i class="chip__dot"></i>For founders, DevRel and PMMs shipping dev tools and AI products</span>
@@ -154,12 +156,35 @@
       <span data-idle>Rehearse your <em>launch</em>.</span>
       <span data-on hidden><span class="tnum" data-count>0</span> points<br>on <em>Hacker News</em>.</span>
     </h1>
-    <p class="hero__lede">Before you post on Hacker News, Reddit or X, paste your launch post or README. Thousands of simulated developers read it, upvote it, argue about it and decide whether to install. In under five minutes you get the predicted thread, the top objections and the edits that change the outcome.</p>
+    <p class="hero__lede">Paste your launch post and watch thousands of simulated developers react before the real ones do.</p>
+    <ol class="flow" aria-label="How it works">
+      <li><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2.5" width="10" height="12" rx="1.5"/><path d="M6 2.5h4v2H6zM5.5 8h5M5.5 10.5h3.5"/></svg>Paste</li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 5l2 3-2 3M7 4l2.6 4L7 12M11.5 5.5l1.7 2.5-1.7 2.5"/></svg>Simulate</li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13l1-3.2 6.8-6.8 2.2 2.2-6.8 6.8zM9.6 4.2l2.2 2.2"/></svg>Fix</li>
+    </ol>
+    <figure class="pred">
+      <figcaption class="pred__cap">EXAMPLE PREDICTION · SIMULATED, NOT REAL RESULTS</figcaption>
+      <ul class="pred__rows">
+        <li class="pred__row">
+          <svg class="pred__ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="3" fill="#FF6600"/><path d="M7.2 5.8l4.8 7.6 4.8-7.6M12 13.4v5" fill="none" stroke="#fff" stroke-width="2.2"/></svg>
+          <span class="pred__body"><b>Hacker News</b> peaks at #3 · 412 points<span class="pred__sub">top objection: install script with no signature</span></span>
+        </li>
+        <li class="pred__row">
+          <svg class="pred__ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#FF4500"/><g fill="#fff"><ellipse cx="12" cy="14.6" rx="6.6" ry="4.4"/><circle cx="6.4" cy="11.6" r="1.7"/><circle cx="17.6" cy="11.6" r="1.7"/><circle cx="16.4" cy="5.6" r="1.4"/></g><path d="M12 10.2l1.1-4.6 3.3.6" fill="none" stroke="#fff" stroke-width="1.1"/><g fill="#FF4500"><circle cx="9.6" cy="13.8" r="1.1"/><circle cx="14.4" cy="13.8" r="1.1"/></g></svg>
+          <span class="pred__body"><b>r/programming</b> 61% positive</span>
+        </li>
+        <li class="pred__row">
+          <svg class="pred__ic pred__ic--x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+          <span class="pred__body"><b>X</b> 38 reposts</span>
+        </li>
+      </ul>
+    </figure>
     <div class="hero__cta">
       <a class="btn btn--bio btn--lg" href="#run" data-hero-toggle><span data-hero-label>Rehearse a launch</span><span class="btn__key" data-hero-icon>→</span></a>
       <a class="btn btn--code btn--lg" href="#access"><span class="bio">$</span>shoal is in early access<span class="btn__tag">Join</span></a>
     </div>
-    <div class="hero__meta"><span>Open-core</span><span>Written in Rust</span><span>Self-hostable</span><span class="hero__hint js-only">Click the water to send a pulse</span></div>
+    <div class="hero__meta"><span>Open-core</span><span>Written in Rust</span><span>Self-hostable</span></div>
+    <p class="hero__hint js-only"><button class="hero__fishbtn" type="button" aria-describedby="tip-note" data-tip-btn>Point at a fish to see what it&rsquo;s doing</button><span aria-hidden="true"> · </span><span>click the water to send a pulse</span><span class="sr" id="tip-note">Each fish is a simulated developer, not a real person. Press again for another, Escape to close.</span></p>
   </div>
 </header>
 
