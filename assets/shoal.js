@@ -189,7 +189,7 @@
         var k = cy * GW + cx; nx[i] = head[k]; head[k] = i;
       }
       var C = cen(), mb = mob();
-      var wx = mb ? W * 0.5 + Math.cos(s.t * 0.21) * W * 0.3 : W * 0.7 + Math.cos(s.t * 0.21) * W * 0.17;
+      var wx = mb ? W * 0.5 + Math.cos(s.t * 0.21) * W * 0.3 : W * 0.56 + Math.cos(s.t * 0.21) * W * 0.3;
       var wy = mb ? H * 0.3 + Math.sin(s.t * 0.29) * H * 0.14 : H * 0.44 + Math.sin(s.t * 0.29) * H * 0.2;
       var rev = s.mode ? n * Math.min(1, s.prog * 2) : 0, CS2 = CS * CS, dec = Math.pow(0.22, dt * SPEED);
       for (i = 0; i < n; i++) {
