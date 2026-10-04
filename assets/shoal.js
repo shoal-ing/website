@@ -139,7 +139,7 @@
     var mob = function () { return W < 760; };
     var cen = function () {
       return mob() ? [[W * 0.5, H * 0.2], [W * 0.82, H * 0.42], [W * 0.2, H * 0.4]]
-        : [[W * 0.72, H * 0.36], [W * 0.88, H * 0.68], [W * 0.62, H * 0.78]];
+        : [[W * 0.16, H * 0.42], [W * 0.85, H * 0.36], [W * 0.82, H * 0.76]];
     };
     s.resize = function (w, h) {
       var ow = W, oh = H; W = w; H = h;
@@ -152,6 +152,9 @@
       }
       s.init = true;
     };
+    // The copy is a rock in the stream: an ellipse the school flows around (desktop only).
+    s.zone = null;
+    s.setZone = function (z) { s.zone = z; };
     s.start = function () { s.mode = 1; s.prog = 0; s.ci = 0; s.spk = []; s.cards = []; setCards([]); };
     s.reset = function () { s.mode = 0; s.prog = 0; s.spk = []; s.cards = []; setCards([]); };
     s.click = function (px, py) { if (!reduced) s.rip.push({ x: px, y: py, r: 0 }); };
@@ -232,6 +235,11 @@
         for (var q = 0; q < s.rip.length; q++) {
           var r = s.rip[q], rx = x[i] - r.x, ry = y[i] - r.y, rd = Math.sqrt(rx * rx + ry * ry) + 0.001;
           if (Math.abs(rd - r.r) < 14) { lum[i] = 1; fx += rx / rd * 0.12; fy += ry / rd * 0.12; }
+        }
+        var Z = s.zone;
+        if (Z && !mb) {
+          var zx = (x[i] - Z.x) / Z.rx, zy = (y[i] - Z.y) / Z.ry, ze = zx * zx + zy * zy;
+          if (ze < 1) { var zd = Math.sqrt(ze) + 0.001, zp = (1 - ze) * 0.55; fx += zx / zd * zp; fy += zy / zd * zp * 0.6; }
         }
         lum[i] *= dec;
         vx[i] += fx * f; vy[i] += fy * f;
@@ -392,6 +400,11 @@
     var resize = function () {
       var r = hero.getBoundingClientRect();
       sim.resize(Math.max(320, Math.round(r.width)), Math.max(400, Math.round(r.height)));
+      var inner = $('.hero__inner', hero);
+      if (inner) {
+        var ir = inner.getBoundingClientRect();
+        sim.setZone({ x: ir.left - r.left + ir.width / 2, y: ir.top - r.top + ir.height / 2, rx: ir.width / 2 + 90, ry: ir.height / 2 + 60 });
+      }
       if (reduced) { for (var i = 0; i < 240; i++) sim.step(1 / 60); sim.draw(); }
     };
     if (window.ResizeObserver) new ResizeObserver(resize).observe(hero); else window.addEventListener('resize', resize);
@@ -648,4 +661,39 @@
         .then(function () { reset(); go.disabled = false; label.textContent = 'Get early access'; });
     });
   }
+
+  // ---------------------------------------------------------------- predictions
+  // The example prediction plays like a live readout: rows arrive one by one and
+  // their numbers count up; the rank climbs. Static (final) values without JS or
+  // with reduced motion.
+  (function () {
+    var card = $('.pred');
+    if (!card || reduced) return;
+    var rows = $$('.pred__row', card), nums = $$('[data-to]', card), played = false;
+    var ease = function (t) { return 1 - Math.pow(1 - t, 3); };
+    function play() {
+      card.classList.add('pred--play');
+      rows.forEach(function (r) { r.classList.remove('is-in'); });
+      nums.forEach(function (n) { n.textContent = n.getAttribute('data-from') || '0'; });
+      rows.forEach(function (r, i) {
+        setTimeout(function () {
+          r.classList.add('is-in');
+          $$('[data-to]', r).forEach(function (n) {
+            var to = +n.getAttribute('data-to'), from = +(n.getAttribute('data-from') || 0), t0 = performance.now(), dur = 1300;
+            (function tick(now) {
+              var k = Math.max(0, Math.min(1, (now - t0) / dur)), v = from + (to - from) * ease(k);
+              n.textContent = fmt(v) + (n.getAttribute('data-suffix') || '');
+              if (k < 1) requestAnimationFrame(tick); else n.classList.add('is-done');
+            })(t0);
+          });
+        }, 350 + i * 520);
+      });
+    }
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting && !played) { played = true; play(); }
+        if (!es[0].isIntersecting) played = false; // replay when it scrolls back in
+      }, { threshold: 0.4 }).observe(card);
+    } else play();
+  })();
 })();

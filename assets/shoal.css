@@ -148,7 +148,7 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 .hero__vig, .hero__fade { position: absolute; inset: 0; pointer-events: none; }
 .hero__vig { background: radial-gradient(ellipse at 65% 40%, transparent 30%, var(--vig) 100%); }
 /* A soft scrim behind the copy instead of a solid panel, so the shoal reads as the whole background. */
-.hero__fade { background: radial-gradient(ellipse min(62%, 760px) 62% at 50% 54%, color-mix(in srgb, var(--bg) 86%, transparent) 0%, color-mix(in srgb, var(--bg) 66%, transparent) 55%, transparent 100%); }
+.hero__fade { background: radial-gradient(ellipse min(62%, 760px) 62% at 50% 54%, color-mix(in srgb, var(--bg) 90%, transparent) 0%, color-mix(in srgb, var(--bg) 74%, transparent) 60%, transparent 100%); }
 .hero__cards { position: absolute; inset: 0; pointer-events: none; }
 .bubble { position: absolute; width: 340px; max-width: calc(100% - 32px); display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--line2); border-radius: 8px; background: var(--surface); }
 .bubble__head { display: flex; gap: 10px; font: 500 11px var(--mono); letter-spacing: .06em; }
@@ -186,6 +186,11 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 .pred__ic { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
 .pred__ic--x { fill: var(--fg); }
 .pred__sub { display: block; font: 400 12px/1.5 var(--mono); color: var(--coral); }
+.pred__n { font-variant-numeric: tabular-nums; color: var(--fg); font-weight: 500; }
+.pred--play .pred__row { opacity: 0; transform: translateY(8px); transition: opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1); }
+.pred--play .pred__row.is-in { opacity: 1; transform: none; }
+.pred__n.is-done { animation: predGlow 1.2s ease-out; }
+@keyframes predGlow { 0% { color: var(--bio); text-shadow: 0 0 12px color-mix(in srgb, var(--bio) 70%, transparent); } 100% { color: var(--fg); text-shadow: none; } }
 
 /* The hover card: who a fish is and what it is doing. It follows its fish and never takes the pointer. */
 .tip { left: 0; top: 0; width: 264px; gap: 4px; padding: 10px 12px; pointer-events: none; z-index: 2; box-shadow: 0 12px 32px -16px rgba(0, 0, 0, .6); will-change: transform; }
