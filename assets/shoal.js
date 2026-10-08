@@ -618,47 +618,66 @@
     email.addEventListener('input', function () {
       if (email.getAttribute('aria-invalid') === 'true' && ok()) { email.setAttribute('aria-invalid', 'false'); err.hidden = true; }
     });
+    var done = $('[data-done]');
+    var busy = function (on) {
+      go.disabled = on;
+      if (on) go.setAttribute('aria-busy', 'true'); else go.removeAttribute('aria-busy');
+      label.textContent = on ? 'Sending…' : 'Get early access';
+    };
+    var badEmail = function () {
+      email.setAttribute('aria-invalid', 'true');
+      fail('! That email address doesn\'t look right. Check it and try again.');
+      email.focus();
+    };
+    /* "Use a different email": the form comes back with the address in it and
+       a fresh human check (the last token was spent). */
+    $('[data-again]').addEventListener('click', function () {
+      done.hidden = true;
+      form.hidden = false;
+      if (human) { human.hidden = false; render(); }
+      email.focus();
+      email.select();
+    });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       err.hidden = true;
-      if (!ok()) {
-        email.setAttribute('aria-invalid', 'true');
-        fail('! That email looks off. Try again?');
-        email.focus();
-        return;
-      }
+      if (!ok()) { badEmail(); return; }
       email.setAttribute('aria-invalid', 'false');
       if (broken || !window.turnstile) { unavailable(); return; }
       if (!token) {
         fail('! One more step: complete the human check below the field, then send.');
+        if (human) human.scrollIntoView({ block: 'nearest' });
         return;
       }
-      go.disabled = true;
-      label.textContent = 'Sending…';
+      busy(true);
       var body = { email: email.value.trim(), product: 'shoal', captchaToken: token };
       fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
         .then(function (res) {
           if (res.ok) return null;
           return res.json().catch(function () { return null; }).then(function (p) {
             var type = p && typeof p.type === 'string' ? p.type : '';
-            throw new Error(/\/captcha-failed$/.test(type) ? 'captcha' : String(res.status));
+            throw new Error(/\/captcha-failed$/.test(type) ? 'captcha'
+              : /\/validation-failed$/.test(type) ? 'email'
+              : String(res.status));
           });
         })
         .then(function () {
           $('[data-done-email]').textContent = body.email;
           form.hidden = true;
           if (human) human.hidden = true;
-          $('[data-done]').hidden = false;
+          done.hidden = false;
+          done.focus();
         })
         .catch(function (x) {
           var why = x && x.message;
+          if (why === 'email') { badEmail(); return; }
           fail(why === 'captcha'
-            ? '! The human check didn\'t go through. It has been reset: complete it again, then send.'
+            ? '! The human check didn\'t go through. It\'s been reset — complete it again, then send.'
             : Number(why) === 429
-              ? '! Too many tries. Give it a minute, then send again.'
-              : '! That didn\'t go through. Try again, or email ' + MAIL + '.');
+              ? '! Too many tries. Wait a minute, then try again.'
+              : '! We couldn\'t reach the waitlist just now. Try again in a moment, or email ' + MAIL + '.');
         })
-        .then(function () { reset(); go.disabled = false; label.textContent = 'Get early access'; });
+        .then(function () { reset(); busy(false); });
     });
   }
 

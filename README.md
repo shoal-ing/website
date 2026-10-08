@@ -216,8 +216,14 @@ so `www` needs a Cloudflare Redirect Rule to the apex (operator task). On
 localhost the widget shows a domain error, which is expected: the site key is
 scoped to the two real hostnames.
 
-No confirmation mail is sent, so the success copy says "we'll email you when
-Shoal is ready to install", not "check your inbox". The `_headers` CSP allows
+The Worker sends a double opt-in mail (via Owlpost), so the success panel says
+"Check your inbox", names the address, points at Spam/Promotions, and offers
+"Use a different email" (the form comes back prefilled with a fresh human
+check). The API answers the same `202` whether the address is new, pending or
+already confirmed, so the panel also tells people who confirmed before that
+they are already on the list. While sending, the button is disabled with
+`aria-busy` and a spinner (no spin under reduced motion); the panel takes focus
+and is announced (`role="status"`). The `_headers` CSP allows
 `connect-src https://api.shoal.ing`.
 
 ## House rules for edits
