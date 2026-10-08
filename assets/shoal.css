@@ -292,6 +292,16 @@ textarea:focus-visible, input:focus-visible, button:focus-visible, a:focus-visib
 .signup__err a { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
 .signup__done { display: flex; flex-direction: column; gap: 8px; align-items: center; padding: 20px 24px; border: 1px solid var(--bio); border-radius: 8px; background: var(--surface); box-shadow: 0 0 0 4px var(--bioring); font: 400 16px/1.5 var(--sans); }
 .signup__done [data-done-email] { font-family: var(--mono); color: var(--bio); }
+.signup__done { max-width: min(100%, 560px); text-align: center; outline: none; }
+.signup__done [data-done-email] { font-weight: 500; overflow-wrap: anywhere; }
+.signup__small { font: 400 14px/1.5 var(--sans); color: var(--muted); }
+.signup__small a { color: var(--fg); }
+.signup__again { padding: 0; border: 0; background: none; color: var(--bio); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.signup__go { display: inline-flex; align-items: center; gap: 8px; }
+.signup__go .spin { display: none; width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: signup-spin .7s linear infinite; }
+.signup__go[aria-busy="true"] .spin { display: inline-block; }
+@keyframes signup-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .signup__go[aria-busy="true"] .spin { display: none; } }
 .end__note { max-width: 640px; font: 400 15px/1.6 var(--sans); color: var(--muted); text-wrap: pretty; }
 .end__note .mono { font-size: 14px; overflow-wrap: anywhere; }
 .foot { margin: 120px auto 0; padding-top: 28px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; font: 400 14px var(--sans); color: var(--muted); }

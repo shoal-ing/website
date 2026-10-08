@@ -338,13 +338,15 @@ Open-core, written in Rust, self-hostable. Install: curl -fsSL shoal.ing/install
       <label class="sr" for="f-email">Email</label>
       <span class="bio mono signup__prompt" aria-hidden="true">$</span>
       <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@company.com" required aria-describedby="e-email">
-      <button class="signup__go" type="submit"><span data-submit-label>Get early access</span></button>
+      <button class="signup__go" type="submit"><span class="spin" aria-hidden="true"></span><span data-submit-label>Get early access</span></button>
     </form>
     <div class="signup__human" role="group" aria-label="Human check" hidden data-captcha></div>
     <p class="signup__err" id="e-email" role="alert" hidden data-form-err></p>
-    <div class="signup__done" role="status" hidden data-done>
-      <p class="kick">YOU'RE ON THE LIST</p>
-      <p>We'll email <span data-done-email></span> when Shoal is ready to install.</p>
+    <div class="signup__done" role="status" aria-live="polite" tabindex="-1" hidden data-done>
+      <p class="kick">CHECK YOUR INBOX</p>
+      <p>We sent a confirmation link to <strong data-done-email></strong>. Click it to hold your place on the Shoal waitlist.</p>
+      <p class="signup__small">It can take a minute — check Spam or Promotions if it isn't there. Already confirmed before? Then you're already on the list; nothing more to do.</p>
+      <p class="signup__small"><button class="signup__again" type="button" data-again>Use a different email</button> · Still nothing? Email <a class="ul" href="mailto:contact@shoal.ing?subject=Shoal%20early%20access">contact@shoal.ing</a>.</p>
     </div>
     <noscript><p class="muted">Or email <a class="ul" href="mailto:contact@shoal.ing?subject=Shoal%20early%20access">contact@shoal.ing</a>.</p></noscript>
     <p class="end__note">When it ships: <span class="mono fg">curl -fsSL shoal.ing/install.sh | sh</span>, signed with cosign so you can verify it before you run it. Not published yet.</p>
