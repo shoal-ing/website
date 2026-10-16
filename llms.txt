@@ -60,5 +60,8 @@ scorer that writes the report.
   simulated developers, not real people.
 - Shoal has published no usage numbers, customers, testimonials or
   calibration results.
+- The film under the hero (assets/films/shoal-film.mp4, 30 seconds, poster
+  shoal-poster.jpg) shows a simulated rehearsal. Its numbers are an example
+  prediction, simulated and not real results.
 - The install script (shoal.ing/install.sh, signed with cosign) is planned
   and not published yet.

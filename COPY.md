@@ -26,6 +26,7 @@ change the page wherever the product differs.
 | Paste → Simulate → Fix: paste a post, simulate the audience, fix it with the ranked edits | Brief | Canvas section 02 (Seed, Simulate, Score; edits ranked by impact) |
 | Venues: Hacker News, Reddit, X | Brief | Canvas hero lede, venue tabs, `PLANS[1]` |
 | Under five minutes to the predicted thread, objections and edits | Brief | Canvas hero lede (no longer on the page; still in `llms.txt`) |
+| "Rehearse your launch. 30 seconds." (the film's caption) | Film length: 30.0 seconds, checked with ffprobe on 2026-10-17. Describes the film's own length, not a measured launch rehearsal time |
 | Open-core, written in Rust, self-hostable | Brief | Canvas hero meta line |
 | Seed: parses claims, calls to action, install steps; sets venue, time, calibrated baseline | Brief | Canvas section 02, card 01 |
 | 10,000 agents, 38 developer segments, 48 simulated hours | Brief | Canvas section 02, card 02 |
@@ -43,6 +44,7 @@ change the page wherever the product differs.
 | :--- | :--- |
 | The mock run: its log, 412 predicted points, the objection and the +64 pts edit | "This is a mock run against the sample post below" |
 | The sample post (a Show HN for Shoal itself) | Same |
+| The film under the hero (`assets/films/shoal-film.mp4`, 30 seconds, 1920x1080; poster `shoal-poster.jpg`) | Its figcaption "EXAMPLE PREDICTION · SIMULATED, NOT REAL RESULTS"; `llms.txt` notes it. The run in the film is a simulated rehearsal, not a result for a real launch |
 | Simulated comments in the hero (maintainer_0217, sec_eng_0044, …) | They appear only while "Rehearse a launch" runs, under "SIMULATING 10,000 AGENTS"; `llms.txt` notes them |
 | Hero audience line: "Built for Founders · DevRel · Product marketers, launching dev tools and AI products" | Who the product is aimed at; a positioning statement, not a customer claim |
 | Hero example prediction: Hacker News peaks at #3 · 412 points, top objection "install script with no signature"; r/programming 61% positive; X 38 reposts; Product Hunt #2 Product of the Day · 640 upvotes | Captioned "EXAMPLE PREDICTION · SIMULATED, NOT REAL RESULTS". The HN line repeats the mock run (412 points, peak #3, the signature objection); the Reddit, X and Product Hunt figures are illustrative and come from no run |
