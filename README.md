@@ -58,6 +58,7 @@ Claims are tracked in [`COPY.md`](COPY.md).
 | Anchor | Section | Job |
 | :--- | :--- | :--- |
 | `#top` | Hero | The claim, the water (move to steer it, click to send a pulse), "Rehearse a launch" sorts the shoal into praise, question and objection schools while simulated comments surface and the headline counts to 412 points |
+| `#film` | The film | The 30-second film, with its poster, under the hero; captioned as an example prediction, simulated and not real results |
 | `#run` | 01 · Try it | An editable sample post with a live word count, and a mock run: four stage cards, a terminal log printed line by line (Run rehearsal or Cmd/Ctrl+Enter), then the predicted points, top objection and suggested edit |
 | `#how` | 02 · How it works | Seed, Simulate, Score, and the four parts of the one Rust binary |
 | `#pricing` | 03 · Pricing | Four planned plans: Open source, Launch, Team, Enterprise |
@@ -91,6 +92,7 @@ at once.
 │   ├── shoal.css               the whole design system, tokens at the top
 │   ├── shoal.js                hero water, logo, mock run, theme, menu, sign-up
 │   ├── favicon.svg             the mark: three chevron fish
+│   ├── films/                  the 30-second film and its poster
 │   ├── og.png                  Open Graph card
 │   ├── apple-touch-icon.png  icon-512.png
 │   ├── org-avatar.png          GitHub organization avatar, uploaded by hand
