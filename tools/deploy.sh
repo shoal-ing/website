@@ -56,5 +56,5 @@ fi
 
 # A Worker with static assets (wrangler.toml): it serves the clean checkout's
 # dist/, on workers.dev and on the custom domains listed there.
-npx --yes wrangler@latest deploy --config "$tmp/tree/wrangler.toml" \
+bunx wrangler@latest deploy --config "$tmp/tree/wrangler.toml" \
   --message="origin/main ${sha:0:7}: $subject"
