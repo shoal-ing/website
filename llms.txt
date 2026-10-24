@@ -5,7 +5,7 @@
 > it and decide whether to install, on a simulated Hacker News, Reddit or X.
 > In under five minutes you get the predicted thread, the top objections and
 > the edits that change the outcome. Open-core, written in Rust,
-> self-hostable. Shoal is in early access: sign-up is by waitlist, nothing is
+> self-hostable. Shoal is in development: sign-up is by waitlist, nothing is
 > installable or billed yet, and the pricing below is planned pricing.
 
 Site: https://shoal.ing/
@@ -15,7 +15,7 @@ Maker: Factory Zero (https://factory0.ventures)
 Contact: contact@shoal.ing
 Tagline: Rehearse your launch.
 For: founders, DevRel and product marketers shipping developer tools and AI products.
-Status: early access, by waitlist. Not generally available.
+Status: in development; early access by waitlist. Not generally available.
 
 ## How it works
 
@@ -35,7 +35,7 @@ One static Rust binary for Linux and macOS (arm64, x86_64), made of the Jev
 engine, a persona sampler, an LLM adapter (a local model or an API) and a
 scorer that writes the report.
 
-## Planned pricing (USD, early access, nothing billed yet)
+## Planned pricing (USD, nothing billed yet)
 
 - Open source: free. The full CLI and Jev engine (MIT core), up to 1,000
   agents per run, bring your own local or API model, community support.

@@ -27,7 +27,7 @@ change the page wherever the product differs.
 | Venues: Hacker News, Reddit, X | Brief | Canvas hero lede, venue tabs, `PLANS[1]` |
 | Under five minutes to the predicted thread, objections and edits | Brief | Canvas hero lede (no longer on the page; still in `llms.txt`) |
 | "Rehearse your launch. 30 seconds." (the film's caption) | Film length: 30.0 seconds, checked with ffprobe on 2026-10-17. Describes the film's own length, not a measured launch rehearsal time |
-| Open-core, written in Rust, self-hostable | Brief | Canvas hero meta line |
+| Open-core, written in Rust, self-hostable (planned, not released) | Brief | Canvas hero meta line |
 | Seed: parses claims, calls to action, install steps; sets venue, time, calibrated baseline | Brief | Canvas section 02, card 01 |
 | 10,000 agents, 38 developer segments, 48 simulated hours | Brief | Canvas section 02, card 02 |
 | Jev, the deterministic engine, decides who acts and when; an LLM writes text only when an agent posts | Brief | Canvas section 02 |
@@ -36,7 +36,7 @@ change the page wherever the product differs.
 | Parts: Jev engine, persona sampler, LLM adapter (local or API), scorer + report | Brief | Canvas section 02 binary panel |
 | Readouts "10,000 agents · 2,880 ticks · 88 LLM calls · 4.8s wall" and "412 pts · peak #3 · 3 trust flags · 2 edits" | Illustration | Canvas section 02; they describe the sample run |
 | Plan contents (agents per run, A/B variants, 40 rehearsals a month, VPC/air-gapped, SSO, SBOM…) | Brief | Canvas `PLANS` |
-| MIT core | Brief | Canvas `PLANS[0].badge` |
+| MIT core (planned) | Brief | Canvas `PLANS[0].badge` |
 
 ## Illustrations (labelled as such on the page)
 
@@ -62,5 +62,5 @@ change the page wherever the product differs.
 | "Sign in" | No account system |
 | Footer links Docs, Changelog, Status (all `href="#"`) | None exist. GitHub, llms.txt, Security and the contact address replace them |
 | "MOST USED" badge on the Launch plan | A usage claim with no users |
-| Plan buttons "Install the CLI", "Rehearse a launch", "Start a team trial" | Lead to flows that do not exist; they lead to early access. Enterprise "Talk to us" is a mailto |
+| Plan buttons "Install the CLI", "Start a team trial"; hero button "See a mock rehearsal" (was "Rehearse a launch") | Lead to flows that do not exist; they lead to early access. Enterprise "Talk to us" is a mailto |
 | Canvas tweak props (temperature, density, speed, glow) | Fixed at their defaults: 0, 3000, 1, 0.6 |

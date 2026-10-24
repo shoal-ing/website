@@ -91,7 +91,7 @@
   /* ------------------------------------------------------------- hero water
      A boids shoal on a spatial grid. Idle, it follows a slow wandering target,
      or the pointer; moving the pointer fast scatters it; a click sends a ring.
-     "Rehearse a launch" sorts it into praise, question and objection schools
+     "See a mock rehearsal" sorts it into praise, question and objection schools
      while simulated comments surface, and the headline counts up. */
   var COMMENTS = [
     { g: 0, tag: 'PRAISE', color: 'var(--bio)', who: 'maintainer_0217', text: 'Single static binary that self-hosts. I can run this in CI.' },
@@ -479,7 +479,7 @@
       heroOn = !heroOn;
       if (heroOn) sim.start(); else sim.reset();
       hIdle.hidden = heroOn; hOn.hidden = !heroOn;
-      hLabel.textContent = heroOn ? 'Reset rehearsal' : 'Rehearse a launch';
+      hLabel.textContent = heroOn ? 'Reset rehearsal' : 'See a mock rehearsal';
       hIcon.textContent = heroOn ? '↺' : '→';
       if (reduced) { if (heroOn) for (var i = 0; i < 900; i++) sim.step(1 / 60); sim.draw(); }
     });
